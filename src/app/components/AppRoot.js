@@ -151,7 +151,7 @@ class AppRoot extends React.Component {
                     <div className='small-2 columns text-center'> { forms[1] }</div>
                     <div className='small-2 columns text-center'> { forms[2] }</div>
                     <div className='small-3 columns text-right'>
-                         { since }
+                         { since } -
                          <span> { this.state.nbMsg } / { this.state.total }</span>
                     </div>
                 </div>

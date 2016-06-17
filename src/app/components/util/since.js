@@ -22,7 +22,7 @@ class since extends React.Component {
     }
 
     render () {
-        var time = humanize.relativeTime(this.state.date.getTime() / 1000) + ' - ';
+        var time = humanize.relativeTime(this.state.date.getTime() / 1000);
 
         return <span className="since">{ time }</span>;
     }
