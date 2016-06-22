@@ -25,11 +25,16 @@
     border-right:0;
 }
 
+.graylogMsg-title {
+    font-weight:bold;
+}
+
 .graylogMsg {
     cursor:pointer;
     border-bottom:1px solid #DDD;
 
     .columns.row {
+
         padding:1em;
         background-color:white;
 

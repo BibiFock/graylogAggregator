@@ -108,6 +108,8 @@ class AppRoot extends React.Component {
             );
         });
 
+        graylogMsg.unshift( <GraylogMsg /> );
+
         var forms = this.fields.map((el) => {
             return (
                 <input type="text" placeholder={ el } ref={ el }

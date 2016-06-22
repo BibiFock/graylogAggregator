@@ -121,22 +121,25 @@ class Graylog {
     parse (body) {
         var data = JSON.parse( body );
         var nbMsg = data.messages.length;
+        var columns = config.graylog.columns.message;
 
         for (var i = 0; i < nbMsg; i++) {
             var msg= data.messages[i].message;
             if (msg.app == undefined) {
                 msg.app = 'unknown';
             }
-            var key = msg.app + msg.message;
+            var key = columns.map( (col) => {
+                return msg[col.name];
+            }).join('-');
             if (this._stats[key] == undefined) {
                 this._stats[key] = {
-                    app: msg.app,
-                    app_version: msg.app_version,
-                    msg: msg.message,
                     total:0,
                     percent:0,
                     messages:[]
                 };
+                columns.forEach( (col) => {
+                    this._stats[key][col.name] = msg[col.name];
+                });
             }
             if (this._stats[key].messages.length < 10) {
                 this._stats[key].messages.push( msg );

@@ -13,12 +13,7 @@ class detail extends React.Component {
 
         this.state = {
             data: props.data,
-            columns: [
-                { name:'time', space:3 },
-                { name:'app', space:2 },
-                { name:'app_version', space:2 },
-                { name:'url', space:5 }
-            ]
+            columns: config.graylog.columns.detail
         }
     }
 
@@ -50,7 +45,7 @@ class detail extends React.Component {
                     value = this.state.data[value];
                 }
             } else {
-                cl += ' title';
+                cl += ' title text-center';
             }
             return (
                 <div className={ cl }>{ value }</div>
