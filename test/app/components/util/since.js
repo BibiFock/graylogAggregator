@@ -1,40 +1,33 @@
-var React = require('react/addons'),
-    assert = require('assert'),
-    humanize =require('humanize'),
-    Since = require('../../../../src/app/components/util/since'),
-    TestUtils = React.addons.TestUtils;
+import React from 'react';
+import { expect } from 'chai';
+import { mount, shallow } from 'enzyme';
+import humanize from 'humanize';
+
+import Since from '../../../../src/app/components/util/since';
 
 describe('Since component', function(){
+
     before('render and locate element', function() {
         this.date = new Date();
-        var renderedComponent = TestUtils.renderIntoDocument(
-            <Since date={ this.date } />
-        );
-
-        var component = TestUtils.findRenderedDOMComponentWithTag(
-            renderedComponent,
-            'span'
-        );
-
-        this.spanEl = component.getDOMNode();
+        this.wrapper = mount( <Since date={ this.date } /> );
     });
 
-    it('<span> should be of type "since"', function () {
-        assert(this.spanEl.getAttribute('class') == 'since');
+    it('<span> check class "since"', function () {
+        expect( this.wrapper.is('since') ).to.equal( true );
     });
 
     it('value should be of type "just now"', function () {
-        assert(
-            this.spanEl.innerHTML == humanize.relativeTime(this.date.getTime() / 1000)
-        );
+        expect(
+            this.wrapper.text()
+        ).to.equal( humanize.relativeTime(this.date.getTime() / 1000) );
     });
 
-    it('value should be of type "2 seconds ago"', function (done) {
+    it('value should be of type "3 seconds ago"', function (done) {
         this.timeout(5000);
-        var span  = this.spanEl;
-        var date = this.date;
+        var value = humanize.relativeTime( this.date.getTime() / 1000);
+        var wrapper = this.wrapper;
         setTimeout(function() {
-            assert(span.innerHTML == humanize.relativeTime(date.getTime() / 1000));
+            expect( wrapper.text() ).to.equal( value );
             done();
         }, 2000);
     });
