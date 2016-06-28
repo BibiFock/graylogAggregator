@@ -22,14 +22,13 @@ describe('Since component', function(){
         ).to.equal( humanize.relativeTime(this.date.getTime() / 1000) );
     });
 
-    it('value should be of type "3 seconds ago"', function (done) {
+    it('value should be of type "2 seconds ago"', function (done) {
         this.timeout(5000);
-        var value = humanize.relativeTime( this.date.getTime() / 1000);
         var wrapper = this.wrapper;
         setTimeout(function() {
-            expect( wrapper.text() ).to.equal( value );
+            expect( wrapper.text() ).to.match( /^\d seconds ago$/ );
             done();
-        }, 2000);
+        }, 3000);
     });
 
 });

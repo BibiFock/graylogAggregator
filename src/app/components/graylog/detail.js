@@ -17,9 +17,9 @@ class detail extends React.Component {
         }
     }
 
-    openLink () {
+    openLink (e) {
         if ( !this.state.data ) {
-            return false;
+            e.stopPropagation();
         }
 
         window.open(
@@ -30,7 +30,7 @@ class detail extends React.Component {
     }
 
     render () {
-        var columns = this.state.columns.map( (column) => {
+        var columns = this.state.columns.map( (column, i) => {
             var cl = 'small-' + column.space + ' columns';
             var value = column.name;
             if (value != 'url') {
@@ -48,7 +48,7 @@ class detail extends React.Component {
                 cl += ' title text-center';
             }
             return (
-                <div className={ cl }>{ value }</div>
+                <div className={ cl } key={i}>{ value }</div>
             );
         });
         var cl = 'graylogDetail columns row';

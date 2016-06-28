@@ -69,7 +69,7 @@ class msg extends React.Component {
         var detailClass = 'row small-12 ' +
             (this.state.hideDetail ? 'hide' : '');
         var columns = this.state.columns.map( (col) => {
-            var cl = 'columns small-' + col.space;
+            var cl = _getColClass(col.space);
             return <div className={ cl } > { this.state[col.name] } </div>;
         });
 
