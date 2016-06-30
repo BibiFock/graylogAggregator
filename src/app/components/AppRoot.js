@@ -102,13 +102,13 @@ class AppRoot extends React.Component {
     }
 
     render () {
-        var graylogMsg = this.state.displayStats.map((stat) => {
+        var graylogMsg = this.state.displayStats.map((stat, index) => {
             return (
-                <GraylogMsg message={ stat } />
+                <GraylogMsg message={ stat } key={ index } />
             );
         });
 
-        graylogMsg.unshift( <GraylogMsg /> );
+        graylogMsg.unshift( <GraylogMsg key={ this.state.displayStats.length } /> );
 
         var forms = this.fields.map((el) => {
             return (
@@ -122,9 +122,9 @@ class AppRoot extends React.Component {
             since = <Since date={ this.state.lastRequest } />;
         }
 
-        var periods = this.state.periods.map((el) => {
+        var periods = this.state.periods.map((el, index) => {
             return (
-                <option value={ el.value } >{ el.name }</option>
+                <option value={ el.value } key={ index } >{ el.name }</option>
             );
         });
 
@@ -157,6 +157,7 @@ class AppRoot extends React.Component {
                          <span> { this.state.nbMsg } / { this.state.total }</span>
                     </div>
                 </div>
+
                 { graylogMsg }
             </div>
         </div>;
