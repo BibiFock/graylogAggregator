@@ -104,11 +104,11 @@ class AppRoot extends React.Component {
     render () {
         var graylogMsg = this.state.displayStats.map((stat, index) => {
             return (
-                <GraylogMsg message={ stat } key={ index } />
+                <GraylogMsg message={ stat } key={ index + 1 } />
             );
         });
 
-        graylogMsg.unshift( <GraylogMsg key={ this.state.displayStats.length } /> );
+        graylogMsg.unshift( <GraylogMsg key="0" /> );
 
         var forms = this.fields.map((el) => {
             return (

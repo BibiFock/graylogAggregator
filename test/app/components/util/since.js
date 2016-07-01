@@ -24,7 +24,7 @@ describe('Since component', function(){
 
     it('value should be of type "2 seconds ago"', function (done) {
         this.timeout(5000);
-        var wrapper = this.wrapper;
+        var wrapper = this.wrapper.find('.since');
         setTimeout(function() {
             expect( wrapper.text() ).to.match( /^\d seconds ago$/ );
             done();
