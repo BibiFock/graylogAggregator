@@ -125,6 +125,7 @@ class Graylog {
 
         for (var i = 0; i < nbMsg; i++) {
             var msg= data.messages[i].message;
+            var index = data.messages[i].index;
             if (msg.app == undefined) {
                 msg.app = 'unknown';
             }
@@ -142,6 +143,8 @@ class Graylog {
                 });
             }
             if (this._stats[key].messages.length < 10) {
+                msg.link = 'http://' + config.graylog.url + ':' + config.graylog.port.web +
+                    '/messages/' + index + '/' + msg._id;
                 this._stats[key].messages.push( msg );
             }
             this._stats[key].total++;

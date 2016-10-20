@@ -7,7 +7,7 @@ module.exports = {
     ],
     devServer:{
         entry: [
-            'webpack-dev-server/client?http://localhost:8080/', // WebpackDevServer host and port
+            'webpack-dev-server/client?http://localhost:4661', // WebpackDevServer host and port
             'webpack/hot/dev-server', // 'only' prevents reload on syntax errors
         ],
         contentBase: './src/client/',

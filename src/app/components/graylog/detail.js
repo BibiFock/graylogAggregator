@@ -22,11 +22,7 @@ class detail extends React.Component {
             e.stopPropagation();
         }
 
-        window.open(
-            'http://' + config.graylog.url + ':' + config.graylog.port.web
-            + config.graylog.linkPath + this.state.data._id,
-            '_blank'
-        );
+        window.open( this.state.data.link, '_blank');
     }
 
     render () {

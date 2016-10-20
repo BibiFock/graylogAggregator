@@ -4,7 +4,6 @@ var config = {
     graylog: {
         auth: '<user>:<pass>',
         url: '<url>',
-        linkPath: '/messages/graylog2_0/',
         port: {
             api: 12900,
             web: 9000
