@@ -96,7 +96,7 @@ class Graylog {
             auth: config.graylog.auth,
             headers: { 'Accept': 'application/json' }
         };
-        debug('getStats', options);
+        debug('getStats', options, config.graylog.columns.message);
 
        var request = http.request(options,  (response) => {
             if ( response.statusCode != 200) {

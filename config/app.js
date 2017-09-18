@@ -9,7 +9,8 @@ var config = {
             web: 9000
         },
         query: {
-            query: '*',
+            //query: '(app:tools-ads* OR app:webex*) AND NOT level:5 AND NOT level:4',
+            query: '(app_group:webediads) AND NOT message:\'Log user action\'',
             limit: 1000,
         },
         periods: [
@@ -21,16 +22,18 @@ var config = {
         ],
         columns: {
             detail: [
-                { name:'time', space:3 },
+                { name:'time', space:2 },
                 { name:'app', space:2 },
+                { name:'level', space:1 },
                 { name:'source', space:2 },
                 { name:'app_version', space:1 },
                 { name:'url', space:4 }
             ],
             message: [
                 { name:'app', space:2 },
+                { name:'level', space:1 },
                 { name:'app_version', space:2 },
-                { name:'message', space:7 }
+                { name:'message', space:6 }
             ]
         }
     }
