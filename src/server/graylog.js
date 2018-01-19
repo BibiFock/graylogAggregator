@@ -25,6 +25,7 @@ class Graylog {
         this._nbMsg = 0;
         this._stats = [];
         this._total = 0;
+        this._lastIds = [];
         this._state = 0;
 
         this._params = {
@@ -32,7 +33,6 @@ class Graylog {
             limit: config.graylog.query.limit,
             range: 5*60,
             //fields: 'app,message,url',
-            offset: 0
         };
     }
 
@@ -73,7 +73,6 @@ class Graylog {
     }
 
     getParams () {
-        this._params.offset = this._nbMsg;
         var params = [];
         for (var name in this._params) {
             params.push(name + '=' + encodeURIComponent( this._params[name] ));
@@ -99,13 +98,6 @@ class Graylog {
         debug('getStats', options, config.graylog.columns.message);
 
        var request = http.request(options,  (response) => {
-            if ( response.statusCode != 200) {
-                this._emit('downloadFailed',{
-                    success: false,
-                    message: 'Url download Failed: ' + response.statusCode
-                });
-                return;
-            }
             var body = '';
             response.setEncoding('utf8');
             response.on('data', (chunk) => {
@@ -113,18 +105,33 @@ class Graylog {
             });
 
             response.on('end', () => {
-                this.parse(body);
+                if (response.statusCode == 200) {
+                    this.parse(body);
+                    return true;
+                }
+                let json = JSON.parse(body);
+                this._emit('downloadFailed',{
+                    success: false,
+                    message: 'Url download Failed: ' + response.statusCode,
+                    details: json.message
+                });
+                this.finishDownload();
             });
         }).end();
     }
 
     parse (body) {
         var data = JSON.parse( body );
-        var nbMsg = data.messages.length;
+        var nbMsg = 0;
         var columns = config.graylog.columns.message;
+        var ids = [];
 
-        for (var i = 0; i < nbMsg; i++) {
-            var msg= data.messages[i].message;
+        var lastTimestamp = data.messages[data.messages.length-1].message.timestamp;
+        for (var i = 0; i < data.messages.length; i++) {
+            var msg = data.messages[i].message;
+            if (this._lastIds.indexOf(msg._id) > -1) {
+                continue;
+            }
             var index = data.messages[i].index;
             if (msg.app == undefined) {
                 msg.app = 'unknown';
@@ -148,19 +155,26 @@ class Graylog {
                 this._stats[key].messages.push( msg );
             }
             this._stats[key].total++;
+            nbMsg++;
+            ids.push(msg._id);
         }
+        this._lastIds = ids;
 
         if ( !this.isEndOfDownload( nbMsg, data.total_results) ) {
             this._params.from = data.from;
-            this._params.to = data.to;
+            this._params.to = lastTimestamp;
             this.getStats();
 
             return;
         }
 
+        this.finishDownload();
+    }
+
+    finishDownload () {
         var groupedStats = []
         for (var index in this._stats) {
-            this._stats[index].percent = this._stats[index].total / nbMsg * 100;
+            this._stats[index].percent = this._stats[index].total / this.nbMsg * 100;
             groupedStats.push( this._stats[index] );
         }
 
@@ -177,7 +191,9 @@ class Graylog {
 
     isEndOfDownload (nbMsg, total) {
         this._nbMsg += nbMsg;
-        this._total = total;
+        if (this._total == 0) {
+            this._total = total;
+        }
 
         this._emit('downloadProgress', {
             nbMsg: this._nbMsg, total: this._total
